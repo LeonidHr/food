@@ -579,6 +579,7 @@ a {
 }
 
 .modal {
+  animation: modalAnim 0.5s ease 0s;
   position: fixed;
   top: 0;
   left: 0;
@@ -588,6 +589,17 @@ a {
   height: 100%;
   overflow: hidden;
   background-color: rgba(0, 0, 0, 0.5);
+}
+.modal._show {
+  display: block;
+}
+@keyframes modalAnim {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 .modal__dialog {
   max-width: 500px;

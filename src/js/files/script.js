@@ -1,6 +1,29 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
+  //* delegation click========================================
+  document.addEventListener("click", e => {
+    const targetElement = e.target;
+
+    if (targetElement.closest('[data-modal]')) {
+      showModal();           
+    }
+    if (
+      targetElement.closest('[data-close]') || 
+      !targetElement.closest('.modal__dialog') && 
+      !targetElement.closest('[data-modal]')
+      ) {
+      hiddenModal();
+    }
+  });
+
+  //* delegation keydown=======================================================
+  document.addEventListener("keydown", e => {
+    if (e.code === "Escape" && modalWindow.classList.contains('_show')) {
+      hiddenModal();
+    }
+  });
+
   //* tabs=====================================================================
 
   const tabsHeader = document.querySelectorAll('.tabheader__item'),
@@ -37,14 +60,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //* counter========================================================================
 
-  const deadline = '2022-07-30';
+  const deadline = '2022-08-01';
 
   function getTimeDifference(endtime) {
-    const t = Date.parse(endtime) - Date.parse(new Date()),
-          days = Math.floor(t / (1000 * 60 * 60 * 24)),
-          hours = Math.floor(t / (1000 * 60 * 60) % 24),
-          minutes = Math.floor(t / (1000 * 60) % 60),
-          seconds = Math.floor(t / 1000 % 60);
+    let days, hours, minutes, seconds;
+    const t = Date.parse(endtime) - Date.parse(new Date());
+
+    if (t <= 0) {
+      days = 0;
+      hours = 0; 
+      minutes = 0;
+      seconds = 0;
+    } else {
+      days = Math.floor(t / (1000 * 60 * 60 * 24)),
+      hours = Math.floor(t / (1000 * 60 * 60) % 24),
+      minutes = Math.floor(t / (1000 * 60) % 60),
+      seconds = Math.floor(t / 1000 % 60);
+    }
     
     return {
       'total': t,
@@ -90,4 +122,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setClock('.timer', deadline);
 
+  //* modal ===================================================================
+  const modalWindow = document.querySelector('.modal');
+
+  function hiddenModal() {
+    modalWindow.classList.remove('_show');
+    document.body.style.overflow = '';
+  }
+
+  function showModal() {
+    modalWindow.classList.add('_show');
+    document.body.style.overflow = 'hidden';
+    clearTimeout(modalTimerId);
+  }
+
+  const modalTimerId = setTimeout(showModal, 10000);
+
+  function showModalByScroll() {
+    if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+      showModal();
+      window.removeEventListener("scroll", showModalByScroll);
+    }
+  }
+
+  window.addEventListener("scroll", showModalByScroll);
 });
