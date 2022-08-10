@@ -127,16 +127,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function hiddenModal() {
     modalWindow.classList.remove('_show');
+    modalWindow.classList.add('_hidden');
     document.body.style.overflow = '';
   }
 
   function showModal() {
     modalWindow.classList.add('_show');
+    modalWindow.classList.remove('_hidden');
     document.body.style.overflow = 'hidden';
     clearTimeout(modalTimerId);
   }
 
-  // const modalTimerId = setTimeout(showModal, 10000);
+  const modalTimerId = setTimeout(showModal, 5000000);
 
   function showModalByScroll() {
     if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
@@ -150,13 +152,14 @@ document.addEventListener("DOMContentLoaded", () => {
   //* add on document menu card ========================================
 
   class MenuCard {
-    constructor(src, alt, title, text, price, parentSelector) {
+    constructor(src, alt, title, text, price, parentSelector, ...classes) {
       this.src = src;
       this.alt = alt;
       this.title = title;
       this.text = text;
       this.price = price;
       this.parent = document.querySelector(parentSelector);
+      this.classes = classes;
       this.transfer = 37;
       this.changeToUAN();
     }
@@ -167,16 +170,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     render() {
       const element = document.createElement("div");
+
+      if (this.classes.length === 0) {
+        this.element = 'menu__item';
+        element.classList.add(this.element);
+      } else {
+        this.classes.forEach(className => element.classList.add(className));
+      }
+
       element.innerHTML = `
-        <div class="menu__item">
-          <img src="${this.src}" alt="${this.alt}">
-          <h3 class="menu__item-subtitle">${this.title}</h3>
-          <div class="menu__item-descr">${this.text}</div>
-          <div class="menu__item-divider"></div>
-          <div class="menu__item-price">
-            <div class="menu__item-cost">Цена:</div>
-            <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
-          </div>
+        <img src="${this.src}" alt="${this.alt}">
+        <h3 class="menu__item-subtitle">${this.title}</h3>
+        <div class="menu__item-descr">${this.text}</div>
+        <div class="menu__item-divider"></div>
+        <div class="menu__item-price">
+          <div class="menu__item-cost">Цена:</div>
+          <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
         </div>
       `;
 
@@ -185,35 +194,129 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   new MenuCard(
-    '../../img/tabs/vegy.jpg',
+    'img/tabs/vegy.jpg',
     'vegy',
     'Меню "Фитнес"',
     `Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и
     фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким
     качеством!`,
     7,
-    '.menu .container'
+    '.menu .container',
   ).render();
 
   new MenuCard(
-    '../../img/tabs/elite.jpg',
+    'img/tabs/elite.jpg',
     'elite',
     'Меню “Премиум”',
     `В меню “Премиум” мы используем не только красивый дизайн упаковки, но и
     качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!`,
     16,
-    '.menu .container'
+    '.menu .container',
+    'menu__item',
   ).render();
 
   new MenuCard(
-    '../../img/tabs/post.jpg',
+    'img/tabs/post.jpg',
     'post',
     'Меню "Постное"',
     `Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов
     животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет
     тофу и импортных вегетарианских стейков.`,
     13,
-    '.menu .container'
+    '.menu .container',
+    'menu__item'
   ).render();
 
+
+  //* forms =====================================================================
+
+  const forms = document.querySelectorAll('form');
+
+  forms.forEach(form => {
+    postData(form);
+  });
+
+  const messages = {
+    loading: 'img/spinner.svg',
+    succses: 'Данные отправлены',
+    failedServer: 'Произошла ошибка на сервере',
+    failed: 'Произошла ошибка, попробуйте позже',
+  };
+
+  function postData(form) {
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+
+      const statusMessage = document.createElement('img');
+      statusMessage.src = messages.loading;
+      statusMessage.style.cssText = `
+        margin: 0 auto;
+        display: block;
+      `;
+      form.insertAdjacentElement("afterend", statusMessage);
+
+      const formData = new FormData(form);
+
+      const object = {};
+      formData.forEach((value, key) => {
+        object[key] = value;
+      });
+
+      fetch('http://food/dist/files/server.php', {
+        method: "POST",
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(object),
+      })
+      .then(data => data.text())
+      .then(data => {
+        console.log(data);
+        addModalMessaage(messages.succses);
+        statusMessage.remove();
+      }).catch(() => {
+        addModalMessaage(messages.failed); 
+      }).finally(() => {
+        form.reset();
+      });
+
+    });
+  }
+
+  function addModalMessaage(message) {
+    const modalDialog = document.querySelector('.modal__dialog');
+    modalDialog.classList.add('_hiddenDisplay');
+    showModal();
+
+    const modalStatus = document.createElement('div');
+    modalStatus.classList.add('modal__dialog');
+    modalStatus.innerHTML = `
+      <div class="modal__content">
+        <div data-close class="modal__close">&times;</div>
+        <div class="modal__title">${message}</div>
+    </div>
+    `;
+
+    modalWindow.append(modalStatus);
+
+    setTimeout(() => {
+      modalStatus.remove();
+      modalDialog.classList.remove('_hiddenDisplay');
+      modalDialog.classList.add('_show');
+      hiddenModal();
+    }, 2000);
+  }
 });
+
+
+
+
+// fetch('https://jsonplaceholder.typicode.com/posts', {
+//     method: "POST",
+//     body: JSON.stringify({name: 'Alex'}),
+//     headers: {
+//       'Content-type': 'application/json',
+//     },
+//   })
+//     .then(response => response.json())
+//     .then(json => console.log(json));

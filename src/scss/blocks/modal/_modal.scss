@@ -1,27 +1,50 @@
+@keyframes showModal {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes hiddenModal {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+._hidden {
+    opacity: 0;
+    visibility: none;
+    z-index: -100;
+    pointer-events: none;
+}
+
+
+._show {
+    display: block;
+    opacity: 1;
+    z-index: 50;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+._hiddenDisplay {
+    display: none;
+}
+
 .modal {
-    animation: modalAnim 0.5s ease 0s;
+    transition: opacity 0.5s ease 0s;
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1050;
-    display: none;
     width: 100%;
     height: 100%;
     overflow: hidden;
     background-color: rgba(0,0,0,.5);
-
-    &._show {
-        display: block;
-    }
-
-    @keyframes modalAnim {
-        0% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 1;
-        }
-    }
 
     &__dialog {
         max-width: 500px;
