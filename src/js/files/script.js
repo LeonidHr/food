@@ -1,3 +1,4 @@
+import axios from "axios";
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -14,6 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
       !targetElement.closest('[data-modal]')
       ) {
       hiddenModal();
+    }
+
+    if (targetElement.closest('.offer__slider-prev')) {
+      getPrevSlide();
+    }
+    if (targetElement.closest('.offer__slider-next')) {
+      getNextSlide();
     }
   });
 
@@ -193,47 +201,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  new MenuCard(
-    'img/tabs/vegy.jpg',
-    'vegy',
-    'Меню "Фитнес"',
-    `Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и
-    фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким
-    качеством!`,
-    7,
-    '.menu .container',
-  ).render();
+  // const getResource = async (url) => {
+  //   const res = await fetch(url);
 
-  new MenuCard(
-    'img/tabs/elite.jpg',
-    'elite',
-    'Меню “Премиум”',
-    `В меню “Премиум” мы используем не только красивый дизайн упаковки, но и
-    качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!`,
-    16,
-    '.menu .container',
-    'menu__item',
-  ).render();
+  //   if (!res.ok) {
+  //     throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+  //   }
 
-  new MenuCard(
-    'img/tabs/post.jpg',
-    'post',
-    'Меню "Постное"',
-    `Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов
-    животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет
-    тофу и импортных вегетарианских стейков.`,
-    13,
-    '.menu .container',
-    'menu__item'
-  ).render();
+  //   return await res.json();
+  // };
 
+  // getResource('http://localhost:3000/menu')
+    // .then(data => {
+    //   data.forEach(({img, altimg, title, descr, price}) => {
+    //     new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+    //   });
+    // });
+
+  axios.get('http://localhost:3000/menu')
+    .then(data => {
+      data.data.forEach(({img, altimg, title, descr, price}) => {
+        new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+      });
+    });
 
   //* forms =====================================================================
 
   const forms = document.querySelectorAll('form');
 
   forms.forEach(form => {
-    postData(form);
+    bindPostData(form);
   });
 
   const messages = {
@@ -243,7 +240,19 @@ document.addEventListener("DOMContentLoaded", () => {
     failed: 'Произошла ошибка, попробуйте позже',
   };
 
-  function postData(form) {
+  const postData = async (url, data) => {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        'Content-type': 'application/json',
+      }, 
+      body: data,
+    });
+
+    return await res.json();
+  };
+
+  function bindPostData(form) {
     form.addEventListener("submit", e => {
       e.preventDefault();
 
@@ -257,28 +266,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const formData = new FormData(form);
 
-      const object = {};
-      formData.forEach((value, key) => {
-        object[key] = value;
-      });
+      const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-      fetch('http://food/dist/files/server.php', {
-        method: "POST",
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify(object),
-      })
-      .then(data => data.text())
-      .then(data => {
-        console.log(data);
-        addModalMessaage(messages.succses);
-        statusMessage.remove();
-      }).catch(() => {
-        addModalMessaage(messages.failed); 
-      }).finally(() => {
-        form.reset();
-      });
+      postData('http://localhost:3000/requests', json)
+        .then(data => {
+          console.log(data);
+          addModalMessaage(messages.succses);
+          statusMessage.remove();
+        }).catch(() => {
+          addModalMessaage(messages.failed); 
+        }).finally(() => {
+          form.reset();
+        });
 
     });
   }
@@ -306,17 +305,90 @@ document.addEventListener("DOMContentLoaded", () => {
       hiddenModal();
     }, 2000);
   }
+
+  //* slider ===============================================================================
+  const currentNum = document.querySelector('#current'),
+        totalNum = document.querySelector('#total'),
+        dotsContainer = document.querySelector('.carousel-indicators'),
+        slides = document.querySelectorAll('.offer__slide'),
+        slidesWrapper = document.querySelector('.offer__slider-wrapper'),
+        slidesField = document.querySelector('.offer__slider-inner'),
+        slidesWidth = window.getComputedStyle(slidesWrapper).width;
+
+  let offset = 0;
+
+  currentNum.innerHTML = addZero(currentNum.innerHTML);
+  totalNum.innerHTML = addZero(slides.length);
+
+  slidesField.style.width = 100 * slides.length + '%';
+  slides.forEach(slide => {
+    slide.style.width = slidesWidth;
+  });
+
+  const dots = [];
+
+  for (let i = 0; i < slides.length; i++) {
+    const dot = document.createElement('div');
+    dot.setAttribute('data-dot', i + 1);
+    dotsContainer.append(dot);
+    dots.push(dot);
+  }
+
+  function addDotActive() {
+    dots.forEach(dot => {
+      dot.classList.remove('_active');
+    });
+    dots[parseInt(currentNum.innerHTML) - 1].classList.add('_active');
+  }
+  addDotActive();
+
+  dots.forEach(dot => {
+    dot.addEventListener("click", e => {
+      const slidesTo = e.target.dataset.dot;
+
+      currentNum.innerHTML = addZero(slidesTo);
+
+      addDotActive();
+
+      offset = parseInt(slidesWidth) * (slidesTo - 1);
+      slidesField.style.transform = `translateX(-${offset}px)`;
+    });
+  });
+
+  function getPrevSlide() {
+    --currentNum.innerHTML;
+    
+    if (currentNum.innerHTML == 0) {
+      currentNum.innerHTML = slides.length;
+    }
+    currentNum.innerHTML = addZero(currentNum.innerHTML);
+
+    if (offset == 0) {
+      offset = parseInt(slidesWidth) * (slides.length - 1);
+    } else {
+      offset -= parseInt(slidesWidth);
+    }
+
+    slidesField.style.transform = `translateX(-${offset}px)`;
+    addDotActive();
+  }
+
+  function getNextSlide() {
+    ++currentNum.innerHTML;
+    if (+currentNum.innerHTML > (+totalNum.innerHTML)) {
+      currentNum.innerHTML = 1;
+    }
+    currentNum.innerHTML = addZero(currentNum.innerHTML);
+  
+    if (offset == parseInt(slidesWidth) * (slides.length - 1)) {
+      offset = 0;
+    } else {
+      offset += parseInt(slidesWidth);
+    }
+
+    slidesField.style.transform = `translateX(-${offset}px)`;
+    addDotActive();
+  }
+
 });
 
-
-
-
-// fetch('https://jsonplaceholder.typicode.com/posts', {
-//     method: "POST",
-//     body: JSON.stringify({name: 'Alex'}),
-//     headers: {
-//       'Content-type': 'application/json',
-//     },
-//   })
-//     .then(response => response.json())
-//     .then(json => console.log(json));
