@@ -1,30 +1,30 @@
-export function tabs() {
-  const tabsHeader = document.querySelectorAll('.tabheader__item'),
-        tabsHeaderContainer = document.querySelector('.tabheader__items'),
-        tabsHeaderContent = document.querySelectorAll('.tabcontent');
+export function tabs(tabsSelector, tabsContainerSelector, tabsContentSelector, activeClass) {
+  const tabs = document.querySelectorAll(tabsSelector),
+        tabsContainer = document.querySelector(tabsContainerSelector),
+        tabsContent = document.querySelectorAll(tabsContentSelector);
 
   function removeTabsActive() {
-    tabsHeaderContent.forEach(item => {
+    tabsContent.forEach(item => {
       item.classList.remove('_active');
     });
 
-    tabsHeader.forEach(item => {
-      item.classList.remove('tabheader__item_active');
+    tabs.forEach(item => {
+      item.classList.remove(activeClass);
     });
   }
 
   function addTabsActive(i = 0) {
-    tabsHeaderContent[i].classList.add('_active');
-    tabsHeader[i].classList.add('tabheader__item_active');
+    tabsContent[i].classList.add('_active');
+    tabs[i].classList.add(activeClass);
   }
 
   removeTabsActive();
   addTabsActive();
 
-  tabsHeaderContainer.addEventListener("click", e => {
+  tabsContainer.addEventListener("click", e => {
     const targetElement = e.target;
 
-    if (targetElement && targetElement.classList.contains('tabheader__item')) {
+    if (targetElement && targetElement.classList.contains(tabsSelector.slice(1))) {
       removeTabsActive();
       addTabsActive(targetElement.dataset.tab);
     }

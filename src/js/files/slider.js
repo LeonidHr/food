@@ -1,10 +1,11 @@
-export function slider(prev) {
-  const currentNum = document.querySelector("#current"),
-    totalNum = document.querySelector("#total"),
-    dotsContainer = document.querySelector(".carousel-indicators"),
-    slides = document.querySelectorAll(".offer__slide"),
-    slidesWrapper = document.querySelector(".offer__slider-wrapper"),
-    slidesField = document.querySelector(".offer__slider-inner"),
+export function slider({dotsWrapper, slidesSelector, wrapper, field, totalNumber, currNum, prev, next}) {
+
+  const currentNum = document.querySelector(currNum),
+    totalNum = document.querySelector(totalNumber),
+    dotsContainer = document.querySelector(dotsWrapper),
+    slides = document.querySelectorAll(slidesSelector),
+    slidesWrapper = document.querySelector(wrapper),
+    slidesField = document.querySelector(field),
     slidesWidth = window.getComputedStyle(slidesWrapper).width;
 
   let offset = 0;
@@ -89,6 +90,6 @@ export function slider(prev) {
     addDotActive();
   }
 
-  document.querySelector('.offer__slider-prev').addEventListener("click", getPrevSlide);
-  document.querySelector('.offer__slider-next').addEventListener("click", getNextSlide);
+  document.querySelector(prev).addEventListener("click", getPrevSlide);
+  document.querySelector(next).addEventListener("click", getNextSlide);
 }

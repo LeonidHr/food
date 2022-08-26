@@ -13,14 +13,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const targetElement = e.target;
 
     if (targetElement.closest('[data-modal]')) {
-      modal.showModal();           
+      modal.showModal('.modal');           
     }
     if (
       targetElement.closest('[data-close]') || 
       !targetElement.closest('.modal__dialog') && 
       !targetElement.closest('[data-modal]')
       ) {
-      modal.hiddenModal();
+      modal.hiddenModal('.modal');
     }
   });
 
@@ -31,19 +31,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  const modalTimerId = setTimeout(() => modal.showModal('.modal', modalTimerId), 100000000000);
+
   //* tabs=====================================================================
-  tabs.tabs();
+  tabs.tabs('.tabheader__item', '.tabheader__items', '.tabcontent', 'tabheader__item_active');
   //* counter========================================================================
-  counter.counter();
+  counter.counter('.timer', '2022-09-04');
   //* modal ===================================================================
-  modal.modal();
+  modal.modal('.modal', modalTimerId);
   //* add on document menu card ========================================
   cards.cards();
   //* forms =====================================================================
-  forms.forms();
+  forms.forms('form', modalTimerId);
   //* calc================================================================================
   calc.calc();
   //*slider=====================================================================
-  slider.slider();
+  slider.slider({
+    currNum: "#current",
+    dotsWrapper: ".carousel-indicators",
+    totalNumber: "#total",
+    slidesSelector: ".offer__slide",
+    wrapper: ".offer__slider-wrapper",
+    field: ".offer__slider-inner",
+    prev: '.offer__slider-prev',
+    next: '.offer__slider-next',
+  });
 });
 

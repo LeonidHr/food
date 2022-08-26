@@ -1,7 +1,8 @@
-import * as modal from "./modal.js";
+import { showModal, hiddenModal} from "./modal.js";
+import { postData } from "./services/services.js";
 
-export function forms() {
-  const forms = document.querySelectorAll('form');
+export function forms(formSelector, modalTimerId) {
+  const forms = document.querySelectorAll(formSelector);
 
   forms.forEach(form => {
     bindPostData(form);
@@ -12,18 +13,6 @@ export function forms() {
     succses: 'Данные отправлены',
     failedServer: 'Произошла ошибка на сервере',
     failed: 'Произошла ошибка, попробуйте позже',
-  };
-
-  const postData = async (url, data) => {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        'Content-type': 'application/json',
-      }, 
-      body: data,
-    });
-
-    return await res.json();
   };
 
   function bindPostData(form) {
@@ -60,7 +49,7 @@ export function forms() {
     const modalWindow = document.querySelector('.modal');
     const modalDialog = document.querySelector('.modal__dialog');
     modalDialog.classList.add('_hiddenDisplay');
-    modal.showModal();
+    showModal('.modal', modalTimerId);
 
     const modalStatus = document.createElement('div');
     modalStatus.classList.add('modal__dialog');
@@ -77,7 +66,7 @@ export function forms() {
       modalStatus.remove();
       modalDialog.classList.remove('_hiddenDisplay');
       modalDialog.classList.add('_show');
-      modal.hiddenModal();
+      hiddenModal('.modal');
     }, 2000);
   }
 }

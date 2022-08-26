@@ -1,5 +1,4 @@
-export function counter() {
-  const deadline = '2022-09-05';
+export function counter(timerSelector, deadline) {
 
   function getTimeDifference(endtime) {
     let days, hours, minutes, seconds;
@@ -59,5 +58,5 @@ export function counter() {
     }
   }
 
-  setClock('.timer', deadline);
+  setClock(timerSelector, deadline);
 }

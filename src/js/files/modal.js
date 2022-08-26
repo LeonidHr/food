@@ -1,24 +1,29 @@
-export function modal() {
-  const modalWindow = document.querySelector('.modal');
+function showModal(modalSelector, modalTimerId) {
+  const modalWindow = document.querySelector(modalSelector);
 
-  function hiddenModal() {
-    modalWindow.classList.remove('_show');
-    modalWindow.classList.add('_hidden');
-    document.body.style.overflow = '';
-  }
+  modalWindow.classList.add('_show');
+  modalWindow.classList.remove('_hidden');
+  document.body.style.overflow = 'hidden';
 
-  function showModal() {
-    modalWindow.classList.add('_show');
-    modalWindow.classList.remove('_hidden');
-    document.body.style.overflow = 'hidden';
+  if (modalTimerId) {
     clearTimeout(modalTimerId);
   }
+}
 
-  const modalTimerId = setTimeout(showModal, 5000000);
+function hiddenModal(modalSelector) {
+  const modalWindow = document.querySelector(modalSelector);
+
+  modalWindow.classList.remove('_show');
+  modalWindow.classList.add('_hidden');
+  document.body.style.overflow = '';
+}
+
+export function modal(modalSelector, modalTimerId) {
+  const modalWindow = document.querySelector(modalSelector);
 
   function showModalByScroll() {
     if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
-      showModal();
+      showModal('.modal', modalTimerId);
       window.removeEventListener("scroll", showModalByScroll);
     }
   }
@@ -26,20 +31,5 @@ export function modal() {
   window.addEventListener("scroll", showModalByScroll);
 }
 
-export function showModal() {
-  const modalWindow = document.querySelector('.modal');
-  const modalTimerId = setTimeout(showModal, 5000000);
-
-  modalWindow.classList.add('_show');
-  modalWindow.classList.remove('_hidden');
-  document.body.style.overflow = 'hidden';
-  clearTimeout(modalTimerId);
-}
-
-export function hiddenModal() {
-  const modalWindow = document.querySelector('.modal');
-
-  modalWindow.classList.remove('_show');
-  modalWindow.classList.add('_hidden');
-  document.body.style.overflow = '';
-}
+export default modal;
+export { showModal, hiddenModal };
