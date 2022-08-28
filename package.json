@@ -13,9 +13,17 @@
   },
   "author": "LeonidHr",
   "license": "ISC",
+  "browserslist": [
+    "> 1%"
+  ],
   "devDependencies": {
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.18.13",
+    "@babel/preset-env": "^7.18.10",
     "axios": "^0.27.2",
+    "babel-loader": "^8.2.5",
     "browser-sync": "latest",
+    "core-js": "^3.25.0",
     "cors": "^2.8.5",
     "del": "6.0.0",
     "gulp": "latest",
@@ -46,5 +54,8 @@
     "webp-converter": "2.2.3",
     "webpack": "latest",
     "webpack-stream": "latest"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1"
   }
 }
