@@ -1,4 +1,8 @@
+"use strict";
+
 window.addEventListener("DOMContentLoaded", () => {
+
+  //* Tabs ====================================================
 
   const tabsParent = document.querySelector('.tabheader__items'),
         tabsContent = document.querySelectorAll('.tabcontent'),
@@ -37,4 +41,60 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     }
   });
+
+  //* Timer ====================================================
+
+  const deadline = '2026-07-20';
+
+  function getTimeRemaining(deadline) {
+    let days, hours, minutes, seconds;
+    const total = Date.parse(deadline) - Date.now();
+
+    if (total <= 0) {
+      days = 0;
+      hours = 0;
+      minutes = 0;
+      seconds = 0;
+    } else {
+      days = Math.floor(total / (1000 * 60 * 60 * 24)),
+      hours = Math.floor((total / (1000 * 60 * 60)) % 24),
+      minutes = Math.floor((total / (1000 * 60)) % 60),
+      seconds = Math.floor((total / 1000) % 60);
+    }
+
+    return {total, days, hours, minutes, seconds};
+  }
+
+  function setTimer(selector, deadline) {
+    const timer = document.querySelector(selector),
+          days = timer.querySelector('#days'),
+          hours = timer.querySelector('#hours'),
+          minutes = timer.querySelector('#minutes'),
+          seconds = timer.querySelector('#seconds'),
+          timerInterval = setInterval(updateTimer, 1000);
+
+    updateTimer();
+
+    function updateTimer() {
+      const total = getTimeRemaining(deadline);
+
+      if (total.total <= 0) clearInterval(timerInterval);
+
+      days.innerHTML = getZero(total.days);
+      hours.innerHTML = getZero(total.hours);
+      minutes.innerHTML = getZero(total.minutes);
+      seconds.innerHTML = getZero(total.seconds);
+    }
+  }
+
+  function getZero(num) {
+    if (num >= 0 && num < 10) {
+      return `0${num}`; 
+    } else {
+      return num;
+    }
+  }
+
+  setTimer('.timer', deadline);
+
 });
