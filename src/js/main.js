@@ -97,4 +97,55 @@ window.addEventListener("DOMContentLoaded", () => {
 
   setTimer('.timer', deadline);
 
+  //* Modal ====================================================
+
+  const modal = document.querySelector('.modal'),
+        modalTriggers = document.querySelectorAll('[data-modal]'),
+        modalCloseBtn = document.querySelector('[data-close]'),
+        modalTimerId = setTimeout(() => toggleModal('show'), 10000);
+
+
+  function toggleModal(type) {
+    modal.classList.toggle('show');
+
+    if (type === 'show') {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    clearTimeout(modalTimerId);
+  }
+
+  function showModalByScroll() {
+    const docEl = document.documentElement;
+
+    if (window.pageYOffset + docEl.clientHeight >= docEl.scrollHeight - 1) {
+      toggleModal('show');
+      window.removeEventListener("scroll", showModalByScroll);
+    }
+  }
+
+  modalTriggers.forEach(trigger => {
+    trigger.addEventListener("click", () => toggleModal('show'));
+  });
+
+  modalCloseBtn.addEventListener("click", () => toggleModal('close'));
+
+  modal.addEventListener('click', e => {
+    if (e.target === modal) {
+      toggleModal('close');
+    }
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.code === 'Escape') {
+      toggleModal('close');
+    }
+  });
+
+  window.addEventListener("scroll", showModalByScroll);
+
 });
+
+
