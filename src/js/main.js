@@ -146,6 +146,64 @@ window.addEventListener("DOMContentLoaded", () => {
 
   window.addEventListener("scroll", showModalByScroll);
 
+  //* Cards ====================================================
+
+  class MenuCard {
+    constructor(src, title, descr, price, parentSelector) {
+      this.src = src;
+      this.title = title;
+      this.descr = descr;
+      this.price = price;
+      this.parent = document.querySelector(parentSelector);
+      this.transfer = 45;
+
+      this.changeToUAH();
+    }
+
+    changeToUAH() {
+      this.price = this.price * this.transfer;
+    }
+
+    render() {
+      this.parent.insertAdjacentHTML("beforeend", `
+        <div class="menu__item" bis_skin_checked="1">
+          <img src="${this.src}" alt="${this.title}">
+          <h3 class="menu__item-subtitle">${this.title}</h3>
+          <div class="menu__item-descr" bis_skin_checked="1">
+            ${this.descr}
+          </div>
+          <div class="menu__item-divider" bis_skin_checked="1"></div>
+          <div class="menu__item-price" bis_skin_checked="1">
+              <div class="menu__item-cost" bis_skin_checked="1">Цена:</div>
+              <div class="menu__item-total" bis_skin_checked="1"><span>${this.price}</span> грн/день</div>
+          </div>
+        </div>
+      `);
+    }
+  }
+
+  new MenuCard(
+    '../img/tabs/vegy.jpg', 
+    'Меню "Фитнес"',
+    'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+    9,
+    '.menu__field .container'
+  ).render();
+  new MenuCard(
+    '../img/tabs/elite.jpg', 
+    'Меню “Премиум”',
+    'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
+    15,
+    '.menu__field .container'
+  ).render();
+  new MenuCard(
+    '../img/tabs/post.jpg', 
+    'Меню "Постное"',
+    'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
+    11,
+    '.menu__field .container'
+  ).render();
+
+
+
 });
-
-
