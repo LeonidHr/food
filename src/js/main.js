@@ -262,8 +262,9 @@ window.addEventListener("DOMContentLoaded", () => {
       request.send(json);
 
       request.addEventListener("load", () => {
+        statusMessage.remove();
+
         if (request.status === 200) {
-          statusMessage.remove();
           showThanksMessage(messages.success);
           console.log(request.response);
           form.reset();
