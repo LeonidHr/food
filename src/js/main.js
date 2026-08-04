@@ -101,46 +101,43 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const modal = document.querySelector('.modal'),
         modalTriggers = document.querySelectorAll('[data-modal]'),
-        modalCloseBtn = document.querySelector('[data-close]'),
-        modalTimerId = setTimeout(() => toggleModal('show'), 10000);
+        modalTimerId = setTimeout(() => openModal(), 10000);
 
-
-  function toggleModal(type) {
-    modal.classList.toggle('show');
-
-    if (type === 'show') {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-
+  function openModal() {
+    modal.classList.add('show');
+    modal.classList.remove('hide');
+    document.body.style.overflow = 'hidden';
     clearTimeout(modalTimerId);
+  }
+
+  function closeModal() {
+    modal.classList.add('hide');
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
   }
 
   function showModalByScroll() {
     const docEl = document.documentElement;
 
     if (window.pageYOffset + docEl.clientHeight >= docEl.scrollHeight - 1) {
-      toggleModal('show');
+      openModal();
       window.removeEventListener("scroll", showModalByScroll);
     }
   }
 
   modalTriggers.forEach(trigger => {
-    trigger.addEventListener("click", () => toggleModal('show'));
+    trigger.addEventListener("click", () => openModal());
   });
 
-  modalCloseBtn.addEventListener("click", () => toggleModal('close'));
-
   modal.addEventListener('click', e => {
-    if (e.target === modal) {
-      toggleModal('close');
+    if (e.target === modal || e.target.getAttribute('data-close') == '') {
+      closeModal();
     }
   });
 
   document.addEventListener("keydown", e => {
     if (e.code === 'Escape') {
-      toggleModal('close');
+      closeModal();
     }
   });
 
@@ -221,6 +218,84 @@ window.addEventListener("DOMContentLoaded", () => {
     'menu__item'
   ).render();
 
+  //* Forms ====================================================
 
+  const forms = document.querySelectorAll('form');
+
+  const messages = {
+    loading: 'img/form/spinner.svg',
+    success: 'Спасибо! Мы скоро с вами свяжемся',
+    failure: 'Что-то пошло не так...'
+  }
+
+  forms.forEach(form => {
+    postForms(form);
+  });
+
+  function postForms(form) {
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      const statusMessage = document.createElement('img');
+      statusMessage.src = messages.loading;
+      statusMessage.style.cssText = `
+        display: block;
+        margin: 0 auto;
+      `;  
+
+      form.insertAdjacentElement("afterend", statusMessage);
+
+      const request = new XMLHttpRequest();
+      request.open('POST', 'server.php');
+      request.setRequestHeader('Content-type', 'application/json');
+
+      const formData = new FormData(form);
+
+      const dataObject = {};
+
+      formData.forEach((value, key) => {
+        dataObject[key] = value;
+      });
+
+      const json = JSON.stringify(dataObject);
+
+      request.send(json);
+
+      request.addEventListener("load", () => {
+        if (request.status === 200) {
+          statusMessage.remove();
+          showThanksMessage(messages.success);
+          console.log(request.response);
+          form.reset();
+        } else {
+          showThanksMessage(messages.failure);
+        }
+      });
+    });
+  }
+
+  function showThanksMessage(message) {
+    const prevModal = document.querySelector('.modal__dialog');
+    prevModal.classList.add('hide');
+    openModal();
+  
+    const thanksModal = document.createElement('div');
+    thanksModal.classList.add('modal__dialog');
+
+    thanksModal.innerHTML = `
+      <div class="modal__content">
+        <div class="modal__close" data-close>×</div>
+        <div class="modal__title">${message}</div>
+      </div>
+    `;
+  
+    document.querySelector('.modal').append(thanksModal);
+  
+    setTimeout(() => {
+      thanksModal.remove();
+      closeModal();
+      prevModal.classList.remove('hide');
+    }, 4000);
+  }
 
 });
