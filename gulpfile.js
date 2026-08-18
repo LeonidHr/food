@@ -10,7 +10,7 @@ const dist = "./dist";
 
 gulp.task("copy-pages", () => {
 	return gulp
-		.src("./src/*.{html,php}")
+		.src("./src/*.{html,php,json}")
 		.pipe(gulp.dest(dist))
 		.pipe(browsersync.stream());
 });
@@ -79,7 +79,7 @@ gulp.task("watch", () => {
 		notify: true,
 	});
 
-	gulp.watch("./src/*.{html,php}", gulp.parallel("copy-pages"));
+	gulp.watch("./src/*.{html,php,json}", gulp.parallel("copy-pages"));
 	gulp.watch("./src/icons/**/*.*", gulp.parallel("copy-assets"));
 	gulp.watch("./src/img/**/*.*", gulp.parallel("copy-assets"));
 	gulp.watch("./src/scss/**/*.scss", gulp.parallel("build-sass"));
@@ -92,7 +92,7 @@ gulp.task(
 );
 
 gulp.task("prod", () => {
-	gulp.src("./src/*.{html,php}").pipe(gulp.dest(dist));
+	gulp.src("./src/*.{html,php,json}").pipe(gulp.dest(dist));
 	gulp.src("./src/img/**/*.*").pipe(gulp.dest(dist + "/img"));
 	gulp.src("./src/icons/**/*.*").pipe(gulp.dest(dist + "/icons"));
 
