@@ -296,45 +296,51 @@ window.addEventListener("DOMContentLoaded", () => {
         nextSlide = document.querySelector('.offer__slider-next'),
         totalSlides = document.querySelector('#total'),
         currentSlide = document.querySelector('#current'),
-        slidesArr = document.querySelectorAll('.offer__slide');
-  let slideIndex = 1;
+        slidesArr = document.querySelectorAll('.offer__slide'),
+        sliderWrap = document.querySelector('.offer__slider-wrapper'),
+        sliderInner = document.querySelector('.offer__slider-inner'),
+        sliderWidth = sliderWrap.offsetWidth;
+    let slideIndex = 1,
+        offset = 0;
 
-  totalSlides.textContent = formatNums(slidesArr.length);
+    function formatNums(num) {
+      if (num < 10) return `0${num}`;
+      else return num;
+    }
 
-  showSlides(slideIndex);
-
-  function showSlides(current) {
-    if (current > slidesArr.length) slideIndex = 1;
-    if (current < 1) slideIndex = slidesArr.length;
-  
-
+    totalSlides.textContent = formatNums(slidesArr.length);
     currentSlide.textContent = formatNums(slideIndex);
 
-    slidesArr.forEach(item => {
-      item.classList.remove('show', 'fade');
-      item.classList.add('hide');
+    sliderInner.style.width = 100 * slidesArr.length + '%';
+    sliderInner.style.display = 'flex';
+    sliderInner.style.transition = '0.5s all';
+    sliderWrap.style.overflow = 'hidden';
+
+    slidesArr.forEach(slide => slide.style.width = sliderWidth);
+
+    nextSlide.addEventListener("click", () => {
+      if (offset >= sliderWidth * (slidesArr.length - 1)) {
+        offset = 0;
+        slideIndex = 1;
+      } else {
+        offset += sliderWidth;
+        slideIndex++;
+      }
+
+      currentSlide.textContent = formatNums(slideIndex);
+      sliderInner.style.transform = `translateX(${-offset}px)`;
     });
 
-    slidesArr[slideIndex - 1].classList.add('show', 'fade');
-    slidesArr[slideIndex - 1].classList.remove('hide');
-  }
+    prevSlide.addEventListener("click", () => {
+      if (offset === 0 ) {
+        offset = sliderWidth * (slidesArr.length - 1);
+        slideIndex = slidesArr.length;
+      } else {
+        offset -= sliderWidth;
+        slideIndex--;
+      }
 
-  function plusSlides(num) {
-    showSlides(slideIndex += num)
-  }
-
-  function formatNums(num) {
-    if (num < 10) return `0${num}`;
-    else return num;
-  }
-
-  prevSlide.addEventListener("click", () => {
-    plusSlides(-1);
-  });
-
-  nextSlide.addEventListener("click", () => {
-    plusSlides(1);
-  });
-
-
+      currentSlide.textContent = formatNums(slideIndex);
+      sliderInner.style.transform = `translateX(${-offset}px)`;
+    });
 });
