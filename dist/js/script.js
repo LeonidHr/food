@@ -1,1 +1,537 @@
-(()=>{"use strict";window.addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".tabheader__items"),t=document.querySelectorAll(".tabcontent"),s=document.querySelectorAll(".tabheader__item");function n(){t.forEach(e=>{e.classList.add("hide"),e.classList.remove("show","fade")}),s.forEach(e=>{e.classList.remove("tabheader__item_active")})}function o(e=0){t[e].classList.remove("hide"),t[e].classList.add("show","fade"),s[e].classList.add("tabheader__item_active")}function c(e){return e>=0&&e<10?`0${e}`:e}n(),o(),e.addEventListener("click",e=>{const t=e.target;t&&t.closest(".tabheader__item")&&s.forEach((e,s)=>{t==e&&(n(),o(s))})}),function(){const e=document.querySelector(".timer"),t=e.querySelector("#days"),s=e.querySelector("#hours"),n=e.querySelector("#minutes"),o=e.querySelector("#seconds"),a=setInterval(i,1e3);function i(){const e=function(e){let t,s,n,o;const c=Date.parse(e)-Date.now();return c<=0?(t=0,s=0,n=0,o=0):(t=Math.floor(c/864e5),s=Math.floor(c/36e5%24),n=Math.floor(c/6e4%60),o=Math.floor(c/1e3%60)),{total:c,days:t,hours:s,minutes:n,seconds:o}}("2026-07-20");e.total<=0&&clearInterval(a),t.innerHTML=c(e.days),s.innerHTML=c(e.hours),n.innerHTML=c(e.minutes),o.innerHTML=c(e.seconds)}i()}();const a=document.querySelector(".modal"),i=document.querySelectorAll("[data-modal]"),r=setTimeout(()=>l(),3e4);function l(){a.classList.add("show"),a.classList.remove("hide"),document.body.style.overflow="hidden",clearTimeout(r)}function d(){a.classList.add("hide"),a.classList.remove("show"),document.body.style.overflow=""}i.forEach(e=>{e.addEventListener("click",()=>l())}),a.addEventListener("click",e=>{e.target!==a&&""!=e.target.getAttribute("data-close")||d()}),document.addEventListener("keydown",e=>{"Escape"===e.code&&d()}),window.addEventListener("scroll",function e(){const t=document.documentElement;window.pageYOffset+t.clientHeight>=t.scrollHeight-1&&(l(),window.removeEventListener("scroll",e))});class u{constructor(e,t,s,n,o,c,...a){this.img=e,this.altimg=t,this.title=s,this.descr=n,this.price=o,this.classes=a,this.parent=document.querySelector(c),this.transfer=45,this.changeToUAH()}changeToUAH(){this.price=this.price*this.transfer}render(){const e=document.createElement("div");this.classes.length?this.classes.forEach(t=>e.classList.add(t)):(this.classes="menu__item",e.classList.add(this.classes)),e.innerHTML=`\n        <div class="menu__item" bis_skin_checked="1">\n          <img src="${this.img}" alt="${this.altimg}">\n          <h3 class="menu__item-subtitle">${this.title}</h3>\n          <div class="menu__item-descr" bis_skin_checked="1">\n            ${this.descr}\n          </div>\n          <div class="menu__item-divider" bis_skin_checked="1"></div>\n          <div class="menu__item-price" bis_skin_checked="1">\n              <div class="menu__item-cost" bis_skin_checked="1">Цена:</div>\n              <div class="menu__item-total" bis_skin_checked="1"><span>${this.price}</span> грн/день</div>\n          </div>\n        </div>\n      `,this.parent.append(e)}}(async function(e){const t=await fetch(e);if(!t.ok)throw new Error(`Could not fetch ${e}, status: ${t.status}`);return t.json()})("http://localhost:3000/menu").then(e=>{e.forEach(({img:e,altimg:t,title:s,descr:n,price:o})=>{new u(e,t,s,n,o,".menu__field .container").render()})});const m=document.querySelectorAll("form");m.forEach(e=>{!function(e){e.addEventListener("submit",t=>{t.preventDefault();const s=document.createElement("img");s.src="../img/form/spinner.svg",s.style.cssText="\n        display: block;\n        margin: 0 auto;\n      ",e.insertAdjacentElement("afterend",s);const n=new FormData(e),o=JSON.stringify(Object.fromEntries(n.entries()));h("http://localhost:3000/requests",o).then(e=>{_("Спасибо! Мы скоро с вами свяжемся"),console.log(e)}).catch(()=>{_("Что-то пошло не так...")}).finally(()=>{s.remove(),e.reset()})})}(e)});const h=async(e,t)=>{const s=await fetch(e,{method:"POST",headers:{"Content-type":"application/json"},body:t});return await s.json()};function _(e){const t=document.querySelector(".modal__dialog");t.classList.add("hide"),l();const s=document.createElement("div");s.classList.add("modal__dialog"),s.innerHTML=`\n      <div class="modal__content">\n        <div class="modal__close" data-close>×</div>\n        <div class="modal__title">${e}</div>\n      </div>\n    `,document.querySelector(".modal").append(s),setTimeout(()=>{s.remove(),d(),t.classList.remove("hide")},4e3)}const f=document.querySelector(".offer__slider-prev"),v=document.querySelector(".offer__slider-next"),g=document.querySelector("#total"),y=document.querySelector("#current"),L=document.querySelectorAll(".offer__slide"),p=document.querySelector(".offer__slider"),S=document.querySelector(".offer__slider-wrapper"),E=document.querySelector(".offer__slider-inner"),w=S.offsetWidth,b=function(){const e=[],t=document.createElement("div");return t.classList.add("carousel-indicators"),p.append(t),L.forEach((s,n)=>{const o=document.createElement("div");o.classList.add("dot"),o.dataset.dot=n,t.append(o),e.push(o)}),t.addEventListener("click",e=>{if(e.target.closest(".dot")){const t=+e.target.dataset.dot;k=w*t,q=t+1,M()}}),e}();let q=1,k=0;function x(e){return e<10?`0${e}`:e}function M(){T(q),y.textContent=x(q),E.style.transform=`translateX(${-k}px)`}function T(e){b.forEach(e=>{e.classList.remove("active")}),b[e-1].classList.add("active")}T(q),g.textContent=x(L.length),y.textContent=x(q),E.style.width=100*L.length+"%",E.style.display="flex",E.style.transition="0.5s all",S.style.overflow="hidden",L.forEach(e=>e.style.width=w),v.addEventListener("click",()=>{k>=w*(L.length-1)?(k=0,q=1):(k+=w,q++),M()}),f.addEventListener("click",()=>{0===k?(k=w*(L.length-1),q=L.length):(k-=w,q--),M()});const A=document.querySelector(".calculating__result span");let I,$,H,C,D;function j(e,t){document.querySelectorAll(e).forEach(e=>{e.classList.remove(t),e.id!==localStorage.getItem("sex")&&e.dataset.ratio!==localStorage.getItem("ratio")||e.classList.add(t)})}function O(){A.textContent=I&&$&&H&&C&&D?"female"===I?Math.round((10*$+6.25*H-5*C-161)*D):Math.round((10*$+6.25*H-5*C+5)*D):"____"}function U(e,t){const s=document.querySelectorAll(e);s.forEach(e=>{e.addEventListener("click",e=>{e.target.getAttribute("data-ratio")?(D=+e.target.dataset.ratio,localStorage.setItem("ratio",D)):(I=e.target.id,localStorage.setItem("sex",I)),s.forEach(e=>{e.classList.remove(t)}),e.target.classList.add(t),O()})})}function F(e){const t=document.querySelector(e);t.addEventListener("input",e=>{switch(/\D/g.test(t.value)?t.style.border="1px solid red":t.style.border="none",t.id){case"height":H=+t.value;break;case"weight":$=+t.value;break;case"age":C=+t.value}O()})}localStorage.getItem("sex")?I=localStorage.getItem("sex"):(I="female",localStorage.setItem("sex",I)),localStorage.getItem("ratio")?D=+localStorage.getItem("ratio"):(D=1.375,localStorage.setItem("ratio",D)),j("#gender div","calculating__choose-item_active"),j(".calculating__choose_big div","calculating__choose-item_active"),O(),U("#gender div","calculating__choose-item_active"),U(".calculating__choose_big div","calculating__choose-item_active"),F("#height"),F("#weight"),F("#age")})})();
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/js/modules/calc.js"
+/*!********************************!*\
+  !*** ./src/js/modules/calc.js ***!
+  \********************************/
+(module) {
+
+function calc() {
+  const result = document.querySelector('.calculating__result span');
+  let sex, weight, height, age, ratio;
+  if (localStorage.getItem('sex')) {
+    sex = localStorage.getItem('sex');
+  } else {
+    sex = 'female';
+    localStorage.setItem('sex', sex);
+  }
+  if (localStorage.getItem('ratio')) {
+    ratio = +localStorage.getItem('ratio');
+  } else {
+    ratio = 1.375;
+    localStorage.setItem('ratio', ratio);
+  }
+  function initLocalSettings(selector, activeClass) {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(element => {
+      element.classList.remove(activeClass);
+      if (element.id === localStorage.getItem('sex') || element.dataset.ratio === localStorage.getItem('ratio')) {
+        element.classList.add(activeClass);
+      }
+    });
+  }
+  initLocalSettings('#gender div', 'calculating__choose-item_active');
+  initLocalSettings('.calculating__choose_big div', 'calculating__choose-item_active');
+  function calcTotal() {
+    if (!sex || !weight || !height || !age || !ratio) {
+      result.textContent = '____';
+      return;
+    }
+    if (sex === 'female') {
+      result.textContent = Math.round((10 * weight + 6.25 * height - 5 * age - 161) * ratio);
+    } else {
+      result.textContent = Math.round((10 * weight + 6.25 * height - 5 * age + 5) * ratio);
+    }
+  }
+  calcTotal();
+  function getStaticInformation(selector, activeClass) {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(element => {
+      element.addEventListener("click", e => {
+        if (e.target.getAttribute('data-ratio')) {
+          ratio = +e.target.dataset.ratio;
+          localStorage.setItem('ratio', ratio);
+        } else {
+          sex = e.target.id;
+          localStorage.setItem('sex', sex);
+        }
+        elements.forEach(item => {
+          item.classList.remove(activeClass);
+        });
+        e.target.classList.add(activeClass);
+        calcTotal();
+      });
+    });
+  }
+  getStaticInformation('#gender div', 'calculating__choose-item_active');
+  getStaticInformation('.calculating__choose_big div', 'calculating__choose-item_active');
+  function getDynamicInformation(selector) {
+    const input = document.querySelector(selector);
+    input.addEventListener("input", e => {
+      if (/\D/g.test(input.value)) {
+        input.style.border = '1px solid red';
+      } else {
+        input.style.border = 'none';
+      }
+      switch (input.id) {
+        case 'height':
+          height = +input.value;
+          break;
+        case 'weight':
+          weight = +input.value;
+          break;
+        case 'age':
+          age = +input.value;
+          break;
+      }
+      calcTotal();
+    });
+  }
+  getDynamicInformation('#height');
+  getDynamicInformation('#weight');
+  getDynamicInformation('#age');
+}
+module.exports = calc;
+
+/***/ },
+
+/***/ "./src/js/modules/cards.js"
+/*!*********************************!*\
+  !*** ./src/js/modules/cards.js ***!
+  \*********************************/
+(module) {
+
+function cards() {
+  class MenuCard {
+    constructor(img, altimg, title, descr, price, parentSelector, ...classes) {
+      this.img = img;
+      this.altimg = altimg;
+      this.title = title;
+      this.descr = descr;
+      this.price = price;
+      this.classes = classes;
+      this.parent = document.querySelector(parentSelector);
+      this.transfer = 45;
+      this.changeToUAH();
+    }
+    changeToUAH() {
+      this.price = this.price * this.transfer;
+    }
+    render() {
+      const div = document.createElement('div');
+      if (this.classes.length) {
+        this.classes.forEach(className => div.classList.add(className));
+      } else {
+        this.classes = 'menu__item';
+        div.classList.add(this.classes);
+      }
+      div.innerHTML = `
+        <div class="menu__item" bis_skin_checked="1">
+          <img src="${this.img}" alt="${this.altimg}">
+          <h3 class="menu__item-subtitle">${this.title}</h3>
+          <div class="menu__item-descr" bis_skin_checked="1">
+            ${this.descr}
+          </div>
+          <div class="menu__item-divider" bis_skin_checked="1"></div>
+          <div class="menu__item-price" bis_skin_checked="1">
+              <div class="menu__item-cost" bis_skin_checked="1">Цена:</div>
+              <div class="menu__item-total" bis_skin_checked="1"><span>${this.price}</span> грн/день</div>
+          </div>
+        </div>
+      `;
+      this.parent.append(div);
+    }
+  }
+  async function getResource(url) {
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+    }
+    return res.json();
+  }
+  getResource('http://localhost:3000/menu').then(data => {
+    data.forEach(({
+      img,
+      altimg,
+      title,
+      descr,
+      price
+    }) => {
+      new MenuCard(img, altimg, title, descr, price, '.menu__field .container').render();
+    });
+  });
+}
+module.exports = cards;
+
+/***/ },
+
+/***/ "./src/js/modules/forms.js"
+/*!*********************************!*\
+  !*** ./src/js/modules/forms.js ***!
+  \*********************************/
+(module) {
+
+function forms() {
+  const forms = document.querySelectorAll('form');
+  const messages = {
+    loading: 'img/form/spinner.svg',
+    success: 'Спасибо! Мы скоро с вами свяжемся',
+    failure: 'Что-то пошло не так...'
+  };
+  forms.forEach(form => {
+    bindPostForms(form);
+  });
+  const postForms = async (url, data) => {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: data
+    });
+    return await res.json();
+  };
+  function bindPostForms(form) {
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const statusMessage = document.createElement('img');
+      statusMessage.src = messages.loading;
+      statusMessage.style.cssText = `
+        display: block;
+        margin: 0 auto;
+      `;
+      form.insertAdjacentElement("afterend", statusMessage);
+      const formData = new FormData(form);
+      const json = JSON.stringify(Object.fromEntries(formData.entries()));
+      postForms('http://localhost:3000/requests', json).then(data => {
+        showThanksMessage(messages.success);
+        console.log(data);
+      }).catch(() => {
+        showThanksMessage(messages.failure);
+      }).finally(() => {
+        statusMessage.remove();
+        form.reset();
+      });
+    });
+  }
+  function showThanksMessage(message) {
+    const prevModal = document.querySelector('.modal__dialog');
+    prevModal.classList.add('hide');
+    openModal();
+    const thanksModal = document.createElement('div');
+    thanksModal.classList.add('modal__dialog');
+    thanksModal.innerHTML = `
+      <div class="modal__content">
+        <div class="modal__close" data-close>×</div>
+        <div class="modal__title">${message}</div>
+      </div>
+    `;
+    document.querySelector('.modal').append(thanksModal);
+    setTimeout(() => {
+      thanksModal.remove();
+      closeModal();
+      prevModal.classList.remove('hide');
+    }, 4000);
+  }
+}
+module.exports = forms;
+
+/***/ },
+
+/***/ "./src/js/modules/modal.js"
+/*!*********************************!*\
+  !*** ./src/js/modules/modal.js ***!
+  \*********************************/
+(module) {
+
+function modal() {
+  const modal = document.querySelector('.modal'),
+    modalTriggers = document.querySelectorAll('[data-modal]'),
+    modalTimerId = setTimeout(() => openModal(), 30000);
+  function openModal() {
+    modal.classList.add('show');
+    modal.classList.remove('hide');
+    document.body.style.overflow = 'hidden';
+    clearTimeout(modalTimerId);
+  }
+  function closeModal() {
+    modal.classList.add('hide');
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  function showModalByScroll() {
+    const docEl = document.documentElement;
+    if (window.pageYOffset + docEl.clientHeight >= docEl.scrollHeight - 1) {
+      openModal();
+      window.removeEventListener("scroll", showModalByScroll);
+    }
+  }
+  modalTriggers.forEach(trigger => {
+    trigger.addEventListener("click", () => openModal());
+  });
+  modal.addEventListener('click', e => {
+    if (e.target === modal || e.target.getAttribute('data-close') == '') {
+      closeModal();
+    }
+  });
+  document.addEventListener("keydown", e => {
+    if (e.code === 'Escape') {
+      closeModal();
+    }
+  });
+  window.addEventListener("scroll", showModalByScroll);
+}
+module.exports = modal;
+
+/***/ },
+
+/***/ "./src/js/modules/slider.js"
+/*!**********************************!*\
+  !*** ./src/js/modules/slider.js ***!
+  \**********************************/
+(module) {
+
+function slider() {
+  const prevSlide = document.querySelector('.offer__slider-prev'),
+    nextSlide = document.querySelector('.offer__slider-next'),
+    totalSlides = document.querySelector('#total'),
+    currentSlide = document.querySelector('#current'),
+    slidesArr = document.querySelectorAll('.offer__slide'),
+    slider = document.querySelector('.offer__slider'),
+    sliderWrap = document.querySelector('.offer__slider-wrapper'),
+    sliderInner = document.querySelector('.offer__slider-inner'),
+    sliderWidth = sliderWrap.offsetWidth,
+    dotsArr = createSliderNav();
+  let slideIndex = 1,
+    offset = 0;
+  changeActiveDot(slideIndex);
+  totalSlides.textContent = formatNums(slidesArr.length);
+  currentSlide.textContent = formatNums(slideIndex);
+  sliderInner.style.width = 100 * slidesArr.length + '%';
+  sliderInner.style.display = 'flex';
+  sliderInner.style.transition = '0.5s all';
+  sliderWrap.style.overflow = 'hidden';
+  slidesArr.forEach(slide => slide.style.width = sliderWidth);
+  function formatNums(num) {
+    if (num < 10) return `0${num}`;else return num;
+  }
+  function changeSlide() {
+    changeActiveDot(slideIndex);
+    currentSlide.textContent = formatNums(slideIndex);
+    sliderInner.style.transform = `translateX(${-offset}px)`;
+  }
+  function createSliderNav() {
+    const dotsArr = [];
+    const dotsContainer = document.createElement('div');
+    dotsContainer.classList.add('carousel-indicators');
+    slider.append(dotsContainer);
+    slidesArr.forEach((slide, i) => {
+      const dot = document.createElement('div');
+      dot.classList.add('dot');
+      dot.dataset.dot = i;
+      dotsContainer.append(dot);
+      dotsArr.push(dot);
+    });
+    dotsContainer.addEventListener('click', e => {
+      if (e.target.closest('.dot')) {
+        const currDotNum = +e.target.dataset.dot;
+        offset = sliderWidth * currDotNum;
+        slideIndex = currDotNum + 1;
+        changeSlide();
+      }
+    });
+    return dotsArr;
+  }
+  function changeActiveDot(curr) {
+    dotsArr.forEach(dot => {
+      dot.classList.remove('active');
+    });
+    dotsArr[curr - 1].classList.add('active');
+  }
+  nextSlide.addEventListener("click", () => {
+    if (offset >= sliderWidth * (slidesArr.length - 1)) {
+      offset = 0;
+      slideIndex = 1;
+    } else {
+      offset += sliderWidth;
+      slideIndex++;
+    }
+    changeSlide();
+  });
+  prevSlide.addEventListener("click", () => {
+    if (offset === 0) {
+      offset = sliderWidth * (slidesArr.length - 1);
+      slideIndex = slidesArr.length;
+    } else {
+      offset -= sliderWidth;
+      slideIndex--;
+    }
+    changeSlide();
+  });
+}
+module.exports = slider;
+
+/***/ },
+
+/***/ "./src/js/modules/tabs.js"
+/*!********************************!*\
+  !*** ./src/js/modules/tabs.js ***!
+  \********************************/
+(module) {
+
+function tabs() {
+  const tabsParent = document.querySelector('.tabheader__items'),
+    tabsContent = document.querySelectorAll('.tabcontent'),
+    tabs = document.querySelectorAll('.tabheader__item');
+  function hideTabsContent() {
+    tabsContent.forEach(item => {
+      item.classList.add('hide');
+      item.classList.remove('show', 'fade');
+    });
+    tabs.forEach(item => {
+      item.classList.remove('tabheader__item_active');
+    });
+  }
+  function showTabsContent(i = 0) {
+    tabsContent[i].classList.remove('hide');
+    tabsContent[i].classList.add('show', 'fade');
+    tabs[i].classList.add('tabheader__item_active');
+  }
+  hideTabsContent();
+  showTabsContent();
+  tabsParent.addEventListener("click", e => {
+    const target = e.target;
+    if (target && target.closest('.tabheader__item')) {
+      tabs.forEach((item, i) => {
+        if (target == item) {
+          hideTabsContent();
+          showTabsContent(i);
+        }
+      });
+    }
+  });
+}
+module.exports = tabs;
+
+/***/ },
+
+/***/ "./src/js/modules/timer.js"
+/*!*********************************!*\
+  !*** ./src/js/modules/timer.js ***!
+  \*********************************/
+(module) {
+
+function timer() {
+  const deadline = '2026-10-20';
+  function getTimeRemaining(deadline) {
+    let days, hours, minutes, seconds;
+    const total = Date.parse(deadline) - Date.now();
+    if (total <= 0) {
+      days = 0;
+      hours = 0;
+      minutes = 0;
+      seconds = 0;
+    } else {
+      days = Math.floor(total / (1000 * 60 * 60 * 24)), hours = Math.floor(total / (1000 * 60 * 60) % 24), minutes = Math.floor(total / (1000 * 60) % 60), seconds = Math.floor(total / 1000 % 60);
+    }
+    return {
+      total,
+      days,
+      hours,
+      minutes,
+      seconds
+    };
+  }
+  function setTimer(selector, deadline) {
+    const timer = document.querySelector(selector),
+      days = timer.querySelector('#days'),
+      hours = timer.querySelector('#hours'),
+      minutes = timer.querySelector('#minutes'),
+      seconds = timer.querySelector('#seconds'),
+      timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
+    function updateTimer() {
+      const total = getTimeRemaining(deadline);
+      if (total.total <= 0) clearInterval(timerInterval);
+      days.innerHTML = getZero(total.days);
+      hours.innerHTML = getZero(total.hours);
+      minutes.innerHTML = getZero(total.minutes);
+      seconds.innerHTML = getZero(total.seconds);
+    }
+  }
+  function getZero(num) {
+    if (num >= 0 && num < 10) {
+      return `0${num}`;
+    } else {
+      return num;
+    }
+  }
+  setTimer('.timer', deadline);
+}
+module.exports = timer;
+
+/***/ }
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	const __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		const cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		const module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			const e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
+(() => {
+"use strict";
+/*!**************************!*\
+  !*** ./src/js/script.js ***!
+  \**************************/
+
+
+window.addEventListener("DOMContentLoaded", () => {
+  const calc = __webpack_require__(/*! ./modules/calc */ "./src/js/modules/calc.js");
+  const cards = __webpack_require__(/*! ./modules/cards */ "./src/js/modules/cards.js");
+  const forms = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
+  const modal = __webpack_require__(/*! ./modules/modal */ "./src/js/modules/modal.js");
+  const slider = __webpack_require__(/*! ./modules/slider */ "./src/js/modules/slider.js");
+  const tabs = __webpack_require__(/*! ./modules/tabs */ "./src/js/modules/tabs.js");
+  const timer = __webpack_require__(/*! ./modules/timer */ "./src/js/modules/timer.js");
+  calc();
+  cards();
+  forms();
+  modal();
+  slider();
+  tabs();
+  timer();
+});
+})();
+
+/******/ })()
+;
+//# sourceMappingURL=script.js.map

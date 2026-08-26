@@ -35,6 +35,16 @@
       "name": "test4",
       "phone": "43243251223",
       "id": "4Etv8v6XbrI"
+    },
+    {
+      "name": "32",
+      "phone": "132",
+      "id": "obmFyrvgphY"
+    },
+    {
+      "name": "test",
+      "phone": "42423423432",
+      "id": "mrFmkvySTCQ"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
