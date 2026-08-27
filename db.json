@@ -60,6 +60,16 @@
       "name": "test",
       "phone": "12wqeeq",
       "id": "coEzCuVb8_c"
+    },
+    {
+      "name": "test2",
+      "phone": "6754657",
+      "id": "07MpASUHQSM"
+    },
+    {
+      "name": "hfyg",
+      "phone": "345678",
+      "id": "qUvRjkTEiT8"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
