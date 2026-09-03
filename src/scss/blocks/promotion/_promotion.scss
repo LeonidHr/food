@@ -22,13 +22,15 @@
         }
     }
     .bgc_y {
-        position: absolute;
-        width: 50%;
-        height: 499px;
-        background: rgba(243, 255, 222, 0.35);
-        z-index: -1;
-        top: -50px;
-        left: 0;
+        @media (min-width:1200px){
+            position: absolute;
+            width: 50%;
+            height: 499px;
+            background: rgba(243, 255, 222, 0.35);
+            z-index: -1;
+            top: -50px;
+            left: 0;     
+        }
     }
     &__text {
         @media (min-width:767px){

@@ -126,7 +126,7 @@
             left: 0;
             opacity: 0;
             transition: 0.4s ease;
-            transform: translateX(100%);
+            transform: translateY(-100%);
             flex-direction: column;
             text-align: center;
             justify-content: center;
@@ -137,7 +137,7 @@
             background: white;
             
             ._active-menu & {
-                transform: translateX(0);
+                transform: translateY(0);
                 opacity: 1;
                 visibility: visible;
                 transition: 0.4s ease;
