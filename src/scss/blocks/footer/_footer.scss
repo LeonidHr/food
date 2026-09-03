@@ -4,13 +4,25 @@
     padding: 45px 0 50px 0;
     color: #fff;
     .container {
+        gap: 30px;
         height: 100%;
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
+
+        @media (max-width: 370px){
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
     }
     .subtitle {
         font-size: 20px;
+
+        @media (max-width: 620px){
+            font-size: 18px;
+        }
     }
     .link {
         display: block;
@@ -19,6 +31,14 @@
         color: #fff;
     }
     .call {
-        text-align: right;
+        @media (min-width: 371px){
+            text-align: right;
+        }
+    }
+
+    .pepper {
+        @media (max-width: 480px){
+            display: none;
+        }
     }
 }

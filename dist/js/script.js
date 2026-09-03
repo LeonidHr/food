@@ -154,8 +154,8 @@ function cards() {
       this.parent.append(div);
     }
   }
-  (0,_services_services__WEBPACK_IMPORTED_MODULE_0__.getResource)('http://localhost:3000/menu').then(data => {
-    data.forEach(({
+  (0,_services_services__WEBPACK_IMPORTED_MODULE_0__.getResource)('../../../db.json').then(data => {
+    data.menu.forEach(({
       img,
       altimg,
       title,

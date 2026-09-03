@@ -19,6 +19,7 @@ async function getResource(url) {
     throw new Error(`Could not fetch ${url}, status: ${res.status}`);
   }
 
+
   return res.json();
 }
 
