@@ -1,11 +1,32 @@
 .preview {
     padding: 28px 0 100px 0;
     position: relative;
+    
+    @media (max-width: 1400px){
+        padding: 20px 0 70px 0;
+    }
+    
+    @media (max-width: 992px){
+        padding-bottom: 130px;
+    }
+
+    @media (max-width: 767px){
+        padding-bottom: 20px;
+    }
+
     &__life {
         font-weight: bold;
         font-size: 20px;
         margin-left: 35px;
         margin-top: 35px;
+
+        @media (max-width: 1400px){
+            margin-left: 0;
+        }
+
+        @media (max-width: 992px){
+            display: none;
+        }
     }
 }
 .bgc_blue {
@@ -19,18 +40,32 @@
 }
 .tabcontainer {
     display: flex;
-    width: 1130px;
+    width: 100%;
     margin: 0 auto;
     box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.25);
+
+    @media (max-width: 580px){
+        flex-direction: column;
+    }
+
 }
 .tabcontent {
-    width: 850px;
+    width: 100%;
     position: relative;
+
+    &__inner {
+        width: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
     img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
+
     &__descr {
         position: absolute;
         top: 300px;
@@ -43,6 +78,20 @@
         font-weight: 300;
         line-height: 36px;
         color: rgba(0, 0, 0, 0.7);
+
+        @media (max-width: 1400px){
+            font-size: 16px;
+            padding: 20px;
+            height: 185px;
+        }
+
+        @media (max-width: 767px){
+            position: static;
+            width: 100%;
+            height: auto;
+            top: 0;
+            right: 0;
+        }
     }
 }
 .tabheader {
@@ -70,6 +119,14 @@
             color: #000;
             font-size: 22px;
             font-weight: 700;
+
+            @media (max-width: 1400px){
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 1400px){
+            font-size: 16px;
         }
     }
 }

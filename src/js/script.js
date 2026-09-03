@@ -7,6 +7,7 @@ import modal from './modules/modal';
 import slider from './modules/slider';
 import tabs from './modules/tabs';
 import timer from './modules/timer';
+import menu from './modules/menu';
 
 window.addEventListener("DOMContentLoaded", () => {
   
@@ -28,4 +29,5 @@ window.addEventListener("DOMContentLoaded", () => {
   });
   tabs('.tabheader__items', '.tabcontent', '.tabheader__item', 'tabheader__item_active');
   timer('.timer', '2026-11-03');
+  menu('.burger', '.header__links', '.header__btn');
 });

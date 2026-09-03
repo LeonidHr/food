@@ -1,8 +1,25 @@
 .promotion {
     padding: 70px 0 240px 0;
     position: relative;
+
+    @media (max-width: 1400px){
+        padding-bottom: 100px;
+    }
+    @media (max-width: 767px){
+        padding: 40px 0 80px 0;
+    }
+
     .container {
         display: flex;
+        gap: 95px;
+
+        @media (max-width:1400px){
+            gap: 40px;
+        }
+
+        @media (max-width: 767px){
+            flex-direction: column;
+        }
     }
     .bgc_y {
         position: absolute;
@@ -14,29 +31,60 @@
         left: 0;
     }
     &__text {
-        width: 50%;
+        @media (min-width:767px){
+            width: 50%;
+        }
     }
     &__descr {
         margin-top: 40px;
         font-size: 20px;
         line-height: 24px;
         font-weight: 300;
+
+        @media (max-width: 1400px){
+            font-size: 18px;
+        }
+
+        @media (max-width: 767px){
+            margin-top: 30px;
+            font-size: 16px;
+        }
+
         span {
             font-weight: bold;
             font-size: 26px;
+
+            @media (max-width: 1400px){
+                font-size: 22px;
+            }
         }
     }
     &__timer {
-        width: 50%;
+        @media (min-width:767px){
+            width: 50%;     
+        }
         .title {
             text-align: right;
         }
         .timer {
             margin-top: 60px;
-            padding-left: 95px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 10px;
+
+            @media (max-width: 1400px){
+                margin-top: 40px;
+            }
+
+            @media (max-width: 767px) and (min-width: 480px){
+                justify-content: end;
+            }
+
+            @media (max-width: 767px){
+                margin-top: 30px;
+            }
+
             &__block {
                 width: 102px;
                 height: 120px;
@@ -45,12 +93,27 @@
                 font-size: 16px;
                 font-weight: 300;
                 text-align: center;
+
+                @media (max-width: 480px){
+                    height: 100px;
+                    width: auto;
+                    flex: 1 1 auto;
+                }
+
                 span {
                     display: block;
                     margin-top: 20px;
                     margin-bottom: 5px;
                     font-size: 56px;
                     font-weight: bold;
+
+                    @media (max-width: 1400px){
+                        font-size: 45px;
+                    }
+
+                    @media (max-width: 480px){
+                        font-size: 30px;
+                    }
                 }
             }
         }

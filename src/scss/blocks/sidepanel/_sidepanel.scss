@@ -1,13 +1,25 @@
 .sidepanel {
     position: fixed;
     left: 60px;
-    top: 240px;
+    top: calc(50% - 200px);
     height: 400px;
     width: 25px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    z-index: 10;
+
+    @media (max-width: 1400px){
+        left: 20px;
+        height: 250px;
+        top: calc(50% - 120px);
+    }
+
+    @media (max-width: 992px){
+        display: none;
+    }
+
     &__text {
         width: 120px;
         height: 120px;
@@ -21,6 +33,10 @@
         width: 1px;
         height: 165px;
         background-color: #000;
+
+        @media (max-width: 1400px){
+            height: 50px;
+        }
     }
     &__icon {
         width: 24px;

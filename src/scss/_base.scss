@@ -9,6 +9,18 @@ a {
     text-decoration: none;
 }
 
+li {
+    list-style-type: none;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+body._active-menu {
+    overflow: hidden;
+}
+
 .btn {
     width: 220px;
     height: 65px;
@@ -23,6 +35,13 @@ a {
     cursor: pointer;
     transition: 0.3s all;
     outline: none;
+
+    @media (max-width: 1400px){
+        width: 190px;
+        height: 50px;
+        font-size: 15px;
+    }
+
     &_white {
         background-color: #fff;
     }
@@ -40,20 +59,42 @@ a {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1300px;
     margin: 0 auto;
+    padding: 0 50px;
+
+    @media (max-width: 1400px){
+        max-width: 900px;
+        padding: 0 30px;
+    }
+
+    @media (max-width: 480px){
+        padding: 0 15px;
+    }
 }
 
 .divider {
     width: 330px;
     height: 1px;
     margin: 0 auto;
-    background-color: rgba(0, 0, 0, 0.5);;
+    background-color: rgba(0, 0, 0, 0.5);
+
+    @media (max-width: 880px){
+        display: none;
+    }
 }
 
 .title {
     font-size: 36px;
     font-weight: 400;
+
+    @media (max-width: 767px){
+        font-size: 30px;
+    }
+
+    @media (max-width: 480px){
+        font-size: 20px;
+    }
 }
 
 .show {

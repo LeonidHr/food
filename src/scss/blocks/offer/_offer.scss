@@ -1,9 +1,19 @@
 .offer {
     padding: 70px 0 100px 0;
     position: relative;
+
+    @media (max-width: 767px){
+        padding-bottom: 30px;
+    }
+
     .container {
         display: flex;
         justify-content: space-between;
+        gap: 50px;
+
+        @media (max-width: 640px){
+            flex-direction: column;
+        }
     }
     .bgc_y {
         position: absolute;
@@ -21,6 +31,10 @@
         margin-top: 30px;
         font-weight: 300;
         line-height: 24px;
+
+        @media (max-width: 767px){
+            font-size: 16px;
+        }
     }
     &__action {
         display: flex;
@@ -30,12 +44,21 @@
     &__advantages {
         width: 330px;
         margin-top: 50px;
+
+        @media (max-width: 767px){
+            margin-top: 0;
+        }
+
         h2 {
             font-weight: bold;
             font-size: 20px;
             margin-top: 20px;
             &:first-child {
                 margin-top: 70px;
+
+                @media (max-width: 767px){
+                    margin-top: 0;
+                }
             }
         }
         &-text {
@@ -52,6 +75,11 @@
         display: flex;
         flex-direction: column;
         align-items: flex-end;
+
+        @media (max-width: 767px){
+            width: 100%;
+        }
+
         &-counter {
             display: flex;
             width: 180px;
@@ -121,4 +149,11 @@
         }
     }
 
+}
+
+
+.slider-container {
+    @media (max-width: 767px){
+        flex-direction: column-reverse !important; 
+    }
 }

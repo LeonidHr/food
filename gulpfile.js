@@ -116,7 +116,7 @@ gulp.task("prod", () => {
 										[
 											"@babel/preset-env",
 											{
-												debug: false,
+												debug: true,
 												corejs: 3,
 												useBuiltIns: "usage",
 											},
