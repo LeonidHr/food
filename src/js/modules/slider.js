@@ -21,7 +21,9 @@ function slider({
         sliderWidth = sliderWrap.offsetWidth,
         dotsArr = createSliderNav();
   let slideIndex = 1,
-      offset = 0;
+      offset = 0,
+      startX = 0,
+      endX = 0;
 
   changeActiveDot(slideIndex);
 
@@ -81,8 +83,8 @@ function slider({
     dotsArr[curr - 1].classList.add('active');
   }
 
-  nextSlide.addEventListener("click", () => {
-    if (offset >= sliderWidth * (slidesArr.length - 1)) {
+  function showNextSlide() {
+   if (offset >= sliderWidth * (slidesArr.length - 1)) {
       offset = 0;
       slideIndex = 1;
     } else {
@@ -91,9 +93,9 @@ function slider({
     }
 
     changeSlide();
-  });
+  }
 
-  prevSlide.addEventListener("click", () => {
+  function showPrevSlide() { 
     if (offset === 0 ) {
       offset = sliderWidth * (slidesArr.length - 1);
       slideIndex = slidesArr.length;
@@ -103,6 +105,27 @@ function slider({
     }
 
     changeSlide();
+  }
+
+  nextSlide.addEventListener("click", showNextSlide);
+  prevSlide.addEventListener("click", showPrevSlide);
+
+  sliderWrap.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+  });
+
+  sliderWrap.addEventListener("touchend", e => {
+    endX = e.changedTouches[0].clientX;
+  
+    const difference = startX - endX;
+
+    if (Math.abs(difference) < 50) return;
+
+    if (difference > 0) {
+      showNextSlide();
+    } else {  
+      showPrevSlide();
+    }
   });
 }
 

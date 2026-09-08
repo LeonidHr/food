@@ -91,6 +91,11 @@
             align-items: center;
             font-size: 24px;
             color: rgba(0,0,0, .5);
+
+            @media (max-width: 767px){
+                justify-content: center;
+                width: 100%;
+            }
         }
         &-wrapper {
             width: 100%;
@@ -104,6 +109,15 @@
         &-next {
             margin-left: 10px;
             cursor: pointer;
+        }
+        &-next img,
+        &-prev img {
+            @media (max-width: 767px){
+                width: 100px;
+            }
+            @media (max-width: 365px){
+                width: 60px;
+            }
         }
         #current {
             font-size: 48px;
