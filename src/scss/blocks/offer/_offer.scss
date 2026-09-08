@@ -110,10 +110,37 @@
             margin-left: 10px;
             cursor: pointer;
         }
+
+        &-next,
+        &-prev {
+            @media (max-width: 570px){
+                z-index: 2;
+                position: absolute;
+                top: calc(50% + 50px);
+                transform: translateY(-50%);
+            }
+        }
+
+        &-next {
+            @media (max-width: 570px){
+                right: 5px;
+            }
+        }
+
+        &-prev {
+            @media (max-width: 570px){
+                left: 5px;
+            }
+        }
+
         &-next img,
         &-prev img {
             @media (max-width: 767px){
                 width: 100px;
+            }
+            @media (max-width: 570px){
+                width: 80px;
+                  
             }
             @media (max-width: 365px){
                 width: 60px;
